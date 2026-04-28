@@ -1,0 +1,23 @@
+# Credenciales - NUNCA subir
+.env
+
+# Datos satelitales - muy pesados
+*.zip
+*.SAFE
+*.tif
+*.EOF
+data/
+
+# Outputs de procesamiento
+isce2_output/
+series_ps/
+output/
+miaplpy_output/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+*.log

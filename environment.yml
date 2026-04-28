@@ -1,0 +1,22 @@
+name: insar
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - isce2
+  - mintpy
+  - snaphu
+  - gdal
+  - numpy
+  - scipy
+  - matplotlib
+  - h5py
+  - netcdf4
+  - pyproj
+  - shapely
+  - pip
+  - pip:
+    - git+https://github.com/insarlab/MiaplPy.git
+    - asf_search
+    - sardem

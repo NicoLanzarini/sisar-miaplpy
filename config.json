@@ -1,0 +1,24 @@
+{
+    "job_id": "test_001",
+    "repository_path": "/data/slc",
+    "slc_dir": "/workspace/slc",
+    "dem_dir": "/workspace/dem",
+    "orbits_dir": "/workspace/orbits",
+    "isce2_output": "/workspace/isce2_output",
+    "miaplpy_output": "/workspace/series_ps",
+    "output_dir": "/workspace/output",
+    "bbox": [-33.0, -31.0, -69.0, -67.0],
+    "dates": [
+        "20230109",
+        "20230121"
+    ],
+    "platform": "Sentinel-1",
+    "workflow": "ISCE2+miaplPy",
+    "phase_linking_method": "EMI",
+    "azimuth_looks": 5,
+    "range_looks": 20,
+    "connections": 2,
+    "esd": 0.85,
+    "ref_lat": "",
+    "ref_lon": ""
+}

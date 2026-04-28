@@ -1,0 +1,28 @@
+services:
+
+  miaplpy:
+    image: miaplpy:1.0
+    container_name: miaplpy_processor
+    env_file:
+      - .env
+    volumes:
+      - workspace:/workspace
+      - ./config.json:/workspace/config.json
+    command: bash /workspace/entrypoint.sh
+
+  mintpy:
+    image: mintpy:1.0
+    container_name: mintpy_processor
+    volumes:
+      - workspace:/workspace
+    depends_on:
+      - miaplpy
+    command: bash /workspace/entrypoint_mintpy.sh
+
+volumes:
+  workspace:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: C:\Users\juann\OneDrive\Desktop\Miaplpy\data
