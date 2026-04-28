@@ -4,9 +4,15 @@
 # Datos satelitales - muy pesados
 *.zip
 *.SAFE
-*.tif
 *.EOF
 data/
+
+# DEM (pesado) pero NO las imágenes de ejemplo
+dem/
+orbits/
+# Excepcion: permitir example_outputs
+!example_outputs/*.png
+!example_outputs/*.csv
 
 # Outputs de procesamiento
 isce2_output/
