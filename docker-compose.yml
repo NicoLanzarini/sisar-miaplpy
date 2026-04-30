@@ -1,27 +1,35 @@
-services:
+version: '3.8'
 
+services:
   sisar-execute:
     image: sisar-execute:latest
     container_name: sisar_execute_processor
+    working_dir: /workspace
     env_file:
       - .env
     volumes:
-      - ${DATA_DIR:-./data}/slc:/workspace/slc
-      - ${DATA_DIR:-./data}/dem:/workspace/dem
-      - ${DATA_DIR:-./data}/orbits:/workspace/orbits
-      - ${DATA_DIR:-./data}/isce2_output:/workspace/isce2_output
-      - ${DATA_DIR:-./data}/series_ps:/workspace/series_ps
-      - ${DATA_DIR:-./data}/output:/workspace/output
+      - ./data/slc:/workspace/slc
+      - ./data/dem:/workspace/dem
+      - ./data/orbits:/workspace/orbits
+      - ./data/isce2_output:/workspace/isce2_output
+      - ./data/series_ps:/workspace/series_ps
+      - ./data/output:/workspace/output
       - ./config.json:/workspace/config.json
+      - ./scripts:/workspace/scripts
     command: bash /workspace/entrypoint.sh
+    stdin_open: true
+    tty: true
 
   mintpy:
     image: mintpy:latest
     container_name: sisar_mintpy_processor
+    working_dir: /workspace
     volumes:
-      - ${DATA_DIR:-./data}/isce2_output:/workspace/isce2_output
-      - ${DATA_DIR:-./data}/series_ps:/workspace/series_ps
-      - ${DATA_DIR:-./data}/output:/workspace/output
+      - ./data/isce2_output:/workspace/isce2_output
+      - ./data/series_ps:/workspace/series_ps
+      - ./data/output:/workspace/output
     depends_on:
       - sisar-execute
     command: bash /workspace/entrypoint_mintpy.sh
+    stdin_open: true
+    tty: true
