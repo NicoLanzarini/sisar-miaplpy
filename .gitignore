@@ -5,6 +5,8 @@
 *.zip
 *.SAFE
 *.EOF
+
+# Carpeta de datos de procesamiento
 data/
 
 # DEM (pesado) pero NO las imágenes de ejemplo

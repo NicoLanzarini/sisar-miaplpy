@@ -5,76 +5,76 @@ Desarrollado para el proyecto SISAR (CEDIAC-UNCUYO / CONICET).
 
 ---
 
-## Descripción
+## Descripcion
 
-Este módulo implementa el **Agente de Procesamiento** del sistema SISAR,
-específicamente el workflow **ISCE2 + MiaplPy** para generación de series
-temporales de deformación a partir de imágenes Sentinel-1.
+Este modulo implementa el **Agente de Procesamiento** del sistema SISAR,
+especificamente el workflow **ISCE2 + MiaplPy** para generacion de series
+temporales de deformacion a partir de imagenes Sentinel-1.
 
 El pipeline completo realiza:
-1. Verifica si las imágenes SLC ya están en el repositorio local
-2. Descarga las imágenes faltantes desde ASF Vertex (NASA)
-3. Descarga el DEM de Copernicus (30m) y las órbitas precisas (ESA)
-4. Corre ISCE2 topsStack para corregistrar las imágenes
-5. Corre MiaplPy para generar la serie temporal de deformación
+1. Verifica si las imagenes SLC ya estan en el repositorio local
+2. Descarga las imagenes faltantes desde ASF Vertex (NASA)
+3. Descarga el DEM de Copernicus (30m) y las orbitas precisas (ESA)
+4. Corre ISCE2 topsStack para corregistrar las imagenes
+5. Corre MiaplPy para generar la serie temporal de deformacion
 
 ---
 
-## ¿Qué es MiaplPy y qué hace?
+## Que es MiaplPy y que hace?
 
 MiaplPy (**MI**ami **A**mi **PL**inking in **PY**thon) es una herramienta de
-procesamiento InSAR basada en **Phase Linking**, un algoritmo estadístico que
-mejora la estimación de fase usando todas las imágenes del stack en conjunto.
+procesamiento InSAR basada en **Phase Linking**, un algoritmo estadistico que
+mejora la estimacion de fase usando todas las imagenes del stack en conjunto.
 
 ### Phase Linking — Algoritmos disponibles
 
-| Algoritmo | Descripción | Uso recomendado |
+| Algoritmo | Descripcion | Uso recomendado |
 |---|---|---|
-| **EMI** | Eigenvalue Minimization of Interferograms | Producción (más preciso) |
+| **EMI** | Eigenvalue Minimization of Interferograms | Produccion (mas preciso) |
 | **EVD** | Eigenvalue Decomposition | Casos simples |
-| **PTA** | Phase Triangle Algorithm | Pruebas rápidas |
+| **PTA** | Phase Triangle Algorithm | Pruebas rapidas |
 
-### ¿Qué es LOS?
+### Que es LOS?
 
-**LOS (Line Of Sight)** es la dirección en la que el satélite mira hacia la
-tierra (~38° de inclinación). La deformación se mide en esa dirección, no
+**LOS (Line Of Sight)** es la direccion en la que el satelite mira hacia la
+tierra (~38 grados de inclinacion). La deformacion se mide en esa direccion, no
 verticalmente:
 
 ```
-        Satélite
+        Satelite
            /
-          /  ← LOS (~38°)
+          /  <- LOS (~38 grados)
          /
         /
     Suelo
 ```
 
-- **LOS negativo** → el suelo se aleja del satélite → generalmente subsidencia
-- **LOS positivo** → el suelo se acerca al satélite → generalmente levantamiento
+- **LOS negativo** -> el suelo se aleja del satelite -> generalmente subsidencia
+- **LOS positivo** -> el suelo se acerca al satelite -> generalmente levantamiento
 
-### ¿MiaplPy corrige errores?
+### MiaplPy corrige errores?
 
-**No.** MiaplPy no es un corrector, es un **estimador de fase más robusto**:
+**No.** MiaplPy no es un corrector, es un **estimador de fase mas robusto**:
 
-| | InSAR clásico | MiaplPy |
+| | InSAR clasico | MiaplPy |
 |---|---|---|
-| Píxeles usados | Solo PS (edificios, rocas) | PS + DS (vegetación, suelo) |
-| Zonas cubiertas | Urbanas | Urbanas + rurales + agrícolas |
-| Ruido de fase | Mayor | Menor (estadísticamente) |
-| Corrección atmosférica | No | No (la hace MintPy después) |
+| Pixeles usados | Solo PS (edificios, rocas) | PS + DS (vegetacion, suelo) |
+| Zonas cubiertas | Urbanas | Urbanas + rurales + agricolas |
+| Ruido de fase | Mayor | Menor (estadisticamente) |
+| Correccion atmosferica | No | No (la hace MintPy despues) |
 
-Las correcciones atmosféricas y de DEM las realiza **MintPy** en el paso siguiente.
+Las correcciones atmosfericas y de DEM las realiza **MintPy** en el paso siguiente.
 
-### ¿Por qué la montaña tiene pocos o ningún punto?
+### Por que la montana tiene pocos o ningun punto?
 
-La coherencia en zonas montañosas es baja o nula por razones físicas reales:
-- **Vegetación densa** → la señal rebota diferente en cada pasada
-- **Nieve y hielo** → cambia la superficie completamente entre imágenes
-- **Sombra y layover** → el radar no llega o se superponen zonas
-- **Pendientes fuertes** → la geometría se distorsiona
+La coherencia en zonas montanosas es baja o nula por razones fisicas reales:
+- **Vegetacion densa** -> la senal rebota diferente en cada pasada
+- **Nieve y hielo** -> cambia la superficie completamente entre imagenes
+- **Sombra y layover** -> el radar no llega o se superponen zonas
+- **Pendientes fuertes** -> la geometria se distorsiona
 
-MiaplPy mejora la situación respecto al InSAR clásico, pero no puede recuperar
-zonas donde directamente no hay señal coherente.
+MiaplPy mejora la situacion respecto al InSAR clasico, pero no puede recuperar
+zonas donde directamente no hay senal coherente.
 
 ---
 
@@ -82,47 +82,47 @@ zonas donde directamente no hay señal coherente.
 
 El sistema genera tres productos principales:
 
-| Producto | Formato | Descripción |
+| Producto | Formato | Descripcion |
 |---|---|---|
-| Mapa de velocidad | `.png` / `.jpg` | Velocidad de deformación LOS en mm/año |
-| Serie temporal | `.png` + `.csv` | Deformación acumulada por punto en el tiempo |
-| Mapa de coherencia | `.png` | Calidad de la señal por píxel (0-1) |
+| Mapa de velocidad | `.png` / `.jpg` | Velocidad de deformacion LOS en mm/anio |
+| Serie temporal | `.png` + `.csv` | Deformacion acumulada por punto en el tiempo |
+| Mapa de coherencia | `.png` | Calidad de la senal por pixel (0-1) |
 
 ---
 
 ## Ejemplos de resultados
 
-> ⚠️ **ADVERTENCIA: Las siguientes imágenes son DATOS SINTÉTICOS generados
-> con fines demostrativos. NO se han utilizado imágenes satelitales reales
+> **ADVERTENCIA: Las siguientes imagenes son DATOS SINTETICOS generados
+> con fines demostrativos. NO se han utilizado imagenes satelitales reales
 > para esta demo. Los valores, patrones y zonas son completamente ficticios.**
 
-### Mapa de Velocidad de Deformación
+### Mapa de Velocidad de Deformacion
 
 ![Mapa de Velocidad](example_outputs/velocity_map.png)
 
-Cada punto representa un píxel PS (Persistent Scatterer) o DS (Distributed
-Scatterer) detectado por MiaplPy. El color indica la velocidad de deformación:
-- **Azul** → subsidencia (hundimiento)
-- **Rojo** → levantamiento
-- **Zonas vacías** → baja coherencia, sin datos confiables
+Cada punto representa un pixel PS (Persistent Scatterer) o DS (Distributed
+Scatterer) detectado por MiaplPy. El color indica la velocidad de deformacion:
+- **Azul** -> subsidencia (hundimiento)
+- **Rojo** -> levantamiento
+- **Zonas vacias** -> baja coherencia, sin datos confiables
 
-### Serie Temporal de Deformación
+### Serie Temporal de Deformacion
 
 ![Serie Temporal](example_outputs/timeseries.png)
 
-Muestra la evolución temporal de la deformación en tres puntos representativos:
-- **Punto A** → zona de subsidencia máxima
-- **Punto B** → zona urbana estable
-- **Punto C** → zona de cultivos con señal estacional
+Muestra la evolucion temporal de la deformacion en tres puntos representativos:
+- **Punto A** -> zona de subsidencia maxima
+- **Punto B** -> zona urbana estable
+- **Punto C** -> zona de cultivos con senal estacional
 
-La línea roja punteada indica la tendencia lineal (velocidad promedio).
+La linea roja punteada indica la tendencia lineal (velocidad promedio).
 
 ### Mapa de Coherencia Temporal
 
 ![Coherencia](example_outputs/coherence_map.png)
 
-Indica la calidad de la señal radar en cada punto. Valores altos (amarillo/verde)
-indican píxeles confiables. MiaplPy descarta puntos con coherencia menor a 0.35.
+Indica la calidad de la senal radar en cada punto. Valores altos (amarillo/verde)
+indican pixeles confiables. MiaplPy descarta puntos con coherencia menor a 0.35.
 
 ---
 
@@ -131,11 +131,11 @@ indican píxeles confiables. MiaplPy descarta puntos con coherencia menor a 0.35
 - Docker Desktop instalado y corriendo
 - Cuenta en [NASA Earthdata](https://urs.earthdata.nasa.gov) (gratuita)
 - ~500 GB de disco disponible para datos reales
-- 16 GB RAM mínimo para correr ISCE2
+- 16 GB RAM minimo para correr ISCE2
 
 ---
 
-## Instalación
+## Instalacion
 
 ### 1. Clonar el repositorio
 
@@ -152,7 +152,7 @@ echo "EARTHDATA_PASS=tu_password" >> .env
 ```
 
 > **IMPORTANTE**: El archivo `.env` nunca debe subirse a GitHub.
-> Ya está incluido en el `.gitignore`.
+> Ya esta incluido en el `.gitignore`.
 
 ### 3. Construir la imagen Docker
 
@@ -161,28 +161,34 @@ docker build -t sisar-execute:latest .
 ```
 
 El build tarda aproximadamente 15-60 minutos. Instala ISCE2, MiaplPy, MintPy
-y todas las dependencias automáticamente.
+y todas las dependencias automaticamente.
+
+### 4. Crear la carpeta de datos
+
+```bash
+mkdir -p data/{slc,dem,orbits,isce2_output,series_ps,output}
+```
 
 ---
 
-## Configuración
+## Configuracion
 
-Editá el archivo `config.json` con los parámetros de tu trabajo:
+Editar el archivo `config.json` con los parametros del trabajo:
 
 ```json
 {
     "job_id": "nombre_del_trabajo",
-    "bbox": [sur, norte, oeste, este],
-    "dates": ["20230109", "20230121", "..."],
+    "bbox": [-33.0, -31.0, -69.0, -67.0],
+    "dates": ["20230109", "20230121"],
     "phase_linking_method": "EMI",
     "azimuth_looks": 5,
     "range_looks": 20
 }
 ```
 
-### Parámetros principales
+### Parametros principales
 
-| Parámetro | Descripción | Valores posibles |
+| Parametro | Descripcion | Valores posibles |
 |---|---|---|
 | `bbox` | Bounding box [S, N, O, E] | coordenadas decimales |
 | `dates` | Fechas a procesar | formato YYYYMMDD |
@@ -194,41 +200,74 @@ Editá el archivo `config.json` con los parámetros de tu trabajo:
 
 ## Uso
 
-### Correr el pipeline completo
+### Opcion 1 — run.bat (Windows, mas facil)
+
+Doble clic en `run.bat` o desde CMD:
+
+```cmd
+cd sisar-miaplpy
+run.bat
+```
+
+Te pregunta donde estan los datos y corre el pipeline completo.
+
+### Opcion 2 — run.sh (Linux/Mac)
+
+```bash
+# Con ruta como argumento
+bash run.sh /ruta/a/datos
+
+# O interactivo (te pregunta la ruta)
+bash run.sh
+```
+
+### Opcion 3 — Docker Compose
+
+```bash
+docker compose up
+```
+
+Los datos deben estar en la carpeta `./data/` del proyecto.
+
+### Opcion 4 — Docker Run manual
 
 ```bash
 docker run --rm \
   --env-file .env \
   -v $(pwd)/config.json:/workspace/config.json \
-  -v /ruta/a/datos:/workspace \
+  -v /ruta/datos/slc:/workspace/slc \
+  -v /ruta/datos/dem:/workspace/dem \
+  -v /ruta/datos/orbits:/workspace/orbits \
+  -v /ruta/datos/isce2_output:/workspace/isce2_output \
+  -v /ruta/datos/series_ps:/workspace/series_ps \
+  -v /ruta/datos/output:/workspace/output \
   sisar-execute:latest
 ```
 
 ### Correr scripts individuales
 
 ```bash
-# Buscar fechas disponibles para una región
-docker run --rm --env-file .env \
-  -v $(pwd)/scripts:/workspace/scripts \
-  sisar-execute:latest python /workspace/scripts/search_dates.py
-
-# Solo descargar imágenes (modo test: 1 escena)
+# Buscar fechas disponibles para una region
 docker run --rm --env-file .env \
   -v $(pwd)/config.json:/workspace/config.json \
-  -v /ruta/datos:/workspace/slc \
+  sisar-execute:latest python /workspace/scripts/search_dates.py
+
+# Solo descargar imagenes (modo test: 1 escena)
+docker run --rm --env-file .env \
+  -v $(pwd)/config.json:/workspace/config.json \
+  -v /ruta/datos/slc:/workspace/slc \
   sisar-execute:latest python /workspace/scripts/download_asf.py \
   /workspace/config.json 20230109 1
 
 # Solo descargar DEM
 docker run --rm \
   -v $(pwd)/config.json:/workspace/config.json \
-  -v /ruta/datos:/workspace/dem \
+  -v /ruta/datos/dem:/workspace/dem \
   sisar-execute:latest python /workspace/scripts/download_dem.py \
   /workspace/config.json
 
-# Generar outputs de ejemplo (datos sintéticos)
+# Generar outputs de ejemplo (datos sinteticos)
 docker run --rm \
-  -v $(pwd)/scripts:/workspace/scripts \
   -v $(pwd)/example_outputs:/workspace/example_outputs \
   sisar-execute:latest bash -c "cd /workspace && python scripts/generate_example_outputs.py"
 ```
@@ -238,15 +277,24 @@ docker run --rm \
 ## Estructura del proyecto
 
 ```
-docker/
+sisar-miaplpy/
 ├── Dockerfile                      # Define la imagen Docker
 ├── environment.yml                 # Paquetes conda/pip
 ├── docker-compose.yml              # Orquesta contenedores
+├── run.bat                         # Ejecuta pipeline en Windows
+├── run.sh                          # Ejecuta pipeline en Linux/Mac
 ├── .env                            # Credenciales (NO subir a git)
 ├── .gitignore                      # Archivos excluidos de git
-├── config.json                     # Parámetros del trabajo
+├── config.json                     # Parametros del trabajo
 ├── entrypoint.sh                   # Script principal del pipeline
-├── example_outputs/                # Imágenes de ejemplo (sintéticas)
+├── data/                           # Datos de procesamiento (NO sube a git)
+│   ├── slc/                        # Imagenes SLC Sentinel-1
+│   ├── dem/                        # DEM Copernicus
+│   ├── orbits/                     # Orbitas POEORB
+│   ├── isce2_output/               # Outputs de ISCE2
+│   ├── series_ps/                  # Outputs de MiaplPy
+│   └── output/                     # Resultados finales
+├── example_outputs/                # Imagenes de ejemplo (sinteticas)
 │   ├── velocity_map.png
 │   ├── timeseries.png
 │   ├── coherence_map.png
@@ -256,10 +304,10 @@ docker/
     ├── search_dates.py             # Busca fechas en ASF Vertex
     ├── download_asf.py             # Descarga SLCs de NASA/ASF
     ├── download_dem.py             # Descarga DEM Copernicus
-    ├── download_orbits.py          # Descarga órbitas ESA
+    ├── download_orbits.py          # Descarga orbitas ESA
     ├── run_isce2.py                # Ejecuta ISCE2 topsStack
     ├── run_miaplpy.py              # Ejecuta MiaplPy
-    └── generate_example_outputs.py # Genera demos sintéticas
+    └── generate_example_outputs.py # Genera demos sinteticas
 ```
 
 ---
@@ -267,10 +315,10 @@ docker/
 ## Estructura de datos esperada
 
 ```
-workspace/
-├── slc/            # Imágenes SLC de Sentinel-1 (.zip)
+data/
+├── slc/            # Imagenes SLC de Sentinel-1 (.zip)
 ├── dem/            # DEM Copernicus (dem.tif)
-├── orbits/         # Órbitas POEORB (.EOF)
+├── orbits/         # Orbitas POEORB (.EOF)
 ├── isce2_output/   # Outputs de ISCE2
 │   ├── merged/
 │   │   ├── SLC/*/*.slc.full
@@ -282,15 +330,15 @@ workspace/
 
 ---
 
-## Stack tecnológico
+## Stack tecnologico
 
-| Herramienta | Función |
+| Herramienta | Funcion |
 |---|---|
 | ISCE2 | Corregistro de SLCs (topsStack) |
 | MiaplPy | Series temporales con Phase Linking |
-| MintPy | Corrección atmosférica y resultados finales |
+| MintPy | Correccion atmosferica y resultados finales |
 | sardem | Descarga DEM Copernicus |
-| asf_search | Búsqueda y descarga desde ASF Vertex |
+| asf_search | Busqueda y descarga desde ASF Vertex |
 | snaphu | Unwrapping de fase |
 
 ---
@@ -300,20 +348,22 @@ workspace/
 - [x] Docker build completo
 - [x] Descarga de SLCs desde ASF Vertex
 - [x] Descarga de DEM Copernicus
-- [x] Descarga de órbitas ESA POEORB
-- [x] Template de MiaplPy generado automáticamente
+- [x] Descarga de orbitas ESA POEORB
+- [x] Template de MiaplPy generado automaticamente
 - [x] Outputs de ejemplo generados
+- [x] Scripts portables (sin rutas hardcodeadas)
+- [x] run.bat (Windows) y run.sh (Linux/Mac)
 - [ ] Prueba con outputs reales de ISCE2
 - [ ] Script de resultados finales
-- [ ] Integración con servidor SISAR
+- [ ] Integracion con servidor SISAR
 
 ---
 
-## Próximos pasos
+## Proximos pasos
 
 1. Conseguir outputs reales de ISCE2 para probar MiaplPy
-2. Ajustar paths según estructura real de ISCE2
-3. Agregar script de generación de resultados finales
+2. Ajustar paths segun estructura real de ISCE2
+3. Agregar script de generacion de resultados finales
 4. Integrar con el sistema SISAR completo
 
 ---

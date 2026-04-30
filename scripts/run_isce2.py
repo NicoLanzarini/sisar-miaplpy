@@ -12,7 +12,7 @@ def generate_topsstack_config(config: dict, work_dir: Path) -> str:
     cmd = [
         "stackSentinel.py",
         "-s", config["slc_dir"],
-        "-d", str(Path(config["dem_dir"]) / "dem.wgs84"),
+        "-d", str(Path(config["dem_dir"]) / "dem.tif"),
         "-o", config["orbits_dir"],
         "-b", bbox_str,
         "-W", "interferogram",

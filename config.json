@@ -1,6 +1,6 @@
 {
     "job_id": "test_001",
-    "repository_path": "/data/slc",
+    "repository_path": "/workspace/slc",
     "slc_dir": "/workspace/slc",
     "dem_dir": "/workspace/dem",
     "orbits_dir": "/workspace/orbits",

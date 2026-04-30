@@ -15,21 +15,19 @@ services:
       - ./data/series_ps:/workspace/series_ps
       - ./data/output:/workspace/output
       - ./config.json:/workspace/config.json
-      - ./scripts:/workspace/scripts
     command: bash /workspace/entrypoint.sh
     stdin_open: true
     tty: true
 
-  mintpy:
-    image: mintpy:latest
-    container_name: sisar_mintpy_processor
-    working_dir: /workspace
-    volumes:
-      - ./data/isce2_output:/workspace/isce2_output
-      - ./data/series_ps:/workspace/series_ps
-      - ./data/output:/workspace/output
-    depends_on:
-      - sisar-execute
-    command: bash /workspace/entrypoint_mintpy.sh
-    stdin_open: true
-    tty: true
+# ─── MintPy (descomentar cuando la imagen esté construida) ──────────
+#  mintpy:
+#    image: mintpy:latest
+#    container_name: sisar_mintpy_processor
+#    working_dir: /workspace
+#    volumes:
+#      - ./data/isce2_output:/workspace/isce2_output
+#      - ./data/series_ps:/workspace/series_ps
+#      - ./data/output:/workspace/output
+#    depends_on:
+#      - sisar-execute
+#    command: bash /workspace/entrypoint_mintpy.sh
