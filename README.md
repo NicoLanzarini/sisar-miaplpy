@@ -157,7 +157,7 @@ echo "EARTHDATA_PASS=tu_password" >> .env
 ### 3. Construir la imagen Docker
 
 ```bash
-docker build -t miaplpy:1.0 .
+docker build -t sisar-execute:latest .
 ```
 
 El build tarda aproximadamente 15-60 minutos. Instala ISCE2, MiaplPy, MintPy
@@ -201,7 +201,7 @@ docker run --rm \
   --env-file .env \
   -v $(pwd)/config.json:/workspace/config.json \
   -v /ruta/a/datos:/workspace \
-  miaplpy:1.0
+  sisar-execute:latest
 ```
 
 ### Correr scripts individuales
@@ -210,27 +210,27 @@ docker run --rm \
 # Buscar fechas disponibles para una región
 docker run --rm --env-file .env \
   -v $(pwd)/scripts:/workspace/scripts \
-  miaplpy:1.0 python /workspace/scripts/search_dates.py
+  sisar-execute:latest python /workspace/scripts/search_dates.py
 
 # Solo descargar imágenes (modo test: 1 escena)
 docker run --rm --env-file .env \
   -v $(pwd)/config.json:/workspace/config.json \
   -v /ruta/datos:/workspace/slc \
-  miaplpy:1.0 python /workspace/scripts/download_asf.py \
+  sisar-execute:latest python /workspace/scripts/download_asf.py \
   /workspace/config.json 20230109 1
 
 # Solo descargar DEM
 docker run --rm \
   -v $(pwd)/config.json:/workspace/config.json \
   -v /ruta/datos:/workspace/dem \
-  miaplpy:1.0 python /workspace/scripts/download_dem.py \
+  sisar-execute:latest python /workspace/scripts/download_dem.py \
   /workspace/config.json
 
 # Generar outputs de ejemplo (datos sintéticos)
 docker run --rm \
   -v $(pwd)/scripts:/workspace/scripts \
   -v $(pwd)/example_outputs:/workspace/example_outputs \
-  miaplpy:1.0 bash -c "cd /workspace && python scripts/generate_example_outputs.py"
+  sisar-execute:latest bash -c "cd /workspace && python scripts/generate_example_outputs.py"
 ```
 
 ---

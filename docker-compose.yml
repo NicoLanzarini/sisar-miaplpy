@@ -1,28 +1,27 @@
 services:
 
-  miaplpy:
-    image: miaplpy:1.0
-    container_name: miaplpy_processor
+  sisar-execute:
+    image: sisar-execute:latest
+    container_name: sisar_execute_processor
     env_file:
       - .env
     volumes:
-      - workspace:/workspace
+      - ${DATA_DIR:-./data}/slc:/workspace/slc
+      - ${DATA_DIR:-./data}/dem:/workspace/dem
+      - ${DATA_DIR:-./data}/orbits:/workspace/orbits
+      - ${DATA_DIR:-./data}/isce2_output:/workspace/isce2_output
+      - ${DATA_DIR:-./data}/series_ps:/workspace/series_ps
+      - ${DATA_DIR:-./data}/output:/workspace/output
       - ./config.json:/workspace/config.json
     command: bash /workspace/entrypoint.sh
 
   mintpy:
-    image: mintpy:1.0
-    container_name: mintpy_processor
+    image: mintpy:latest
+    container_name: sisar_mintpy_processor
     volumes:
-      - workspace:/workspace
+      - ${DATA_DIR:-./data}/isce2_output:/workspace/isce2_output
+      - ${DATA_DIR:-./data}/series_ps:/workspace/series_ps
+      - ${DATA_DIR:-./data}/output:/workspace/output
     depends_on:
-      - miaplpy
+      - sisar-execute
     command: bash /workspace/entrypoint_mintpy.sh
-
-volumes:
-  workspace:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: C:\Users\juann\OneDrive\Desktop\Miaplpy\data

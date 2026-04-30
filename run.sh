@@ -50,12 +50,12 @@ echo "[OK] Directorio de datos: $DATA_DIR"
 
 # ── 4. Construir imagen si no existe ─────────────────────────────────────────
 echo ""
-if ! docker image inspect miaplpy:1.0 > /dev/null 2>&1; then
-    echo "[BUILD] Construyendo imagen miaplpy:1.0 (15-60 min la primera vez)..."
-    docker build -t miaplpy:1.0 "$SCRIPT_DIR"
+if ! docker image inspect sisar-execute:latest > /dev/null 2>&1; then
+    echo "[BUILD] Construyendo imagen sisar-execute:latest (15-60 min la primera vez)..."
+    docker build -t sisar-execute:latest "$SCRIPT_DIR"
     echo "[OK] Imagen construida."
 else
-    echo "[OK] Imagen miaplpy:1.0 ya existe."
+    echo "[OK] Imagen sisar-execute:latest ya existe."
 fi
 
 # ── 5. Correr pipeline ────────────────────────────────────────────────────────
@@ -75,7 +75,7 @@ docker run --rm \
   -v "$DATA_DIR/isce2_output:/workspace/isce2_output" \
   -v "$DATA_DIR/series_ps:/workspace/series_ps" \
   -v "$DATA_DIR/output:/workspace/output" \
-  miaplpy:1.0
+  sisar-execute:latest
 
 echo ""
 echo "============================================"

@@ -69,12 +69,12 @@ if not exist "%DATA_DIR%\output"        mkdir "%DATA_DIR%\output"
 
 :: ── 5. Construir imagen si no existe ─────────────────────────────────────────
 echo.
-docker image inspect miaplpy:1.0 >nul 2>&1
+docker image inspect sisar-execute:latest >nul 2>&1
 if errorlevel 1 (
-    echo [BUILD] Imagen miaplpy:1.0 no encontrada. Construyendo...
+    echo [BUILD] Imagen sisar-execute:latest no encontrada. Construyendo...
     echo         Esto puede tardar 15-60 minutos la primera vez.
     echo.
-    docker build -t miaplpy:1.0 "%~dp0"
+    docker build -t sisar-execute:latest "%~dp0"
     if errorlevel 1 (
         echo.
         echo [ERROR] Falló la construcción de la imagen Docker.
@@ -83,7 +83,7 @@ if errorlevel 1 (
     )
     echo [OK] Imagen construida exitosamente.
 ) else (
-    echo [OK] Imagen miaplpy:1.0 ya existe.
+    echo [OK] Imagen sisar-execute:latest ya existe.
 )
 
 :: ── 6. Correr el pipeline ─────────────────────────────────────────────────────
@@ -103,7 +103,7 @@ docker run --rm ^
   -v "%DATA_DIR%\isce2_output:/workspace/isce2_output" ^
   -v "%DATA_DIR%\series_ps:/workspace/series_ps" ^
   -v "%DATA_DIR%\output:/workspace/output" ^
-  miaplpy:1.0
+  sisar-execute:latest
 
 if errorlevel 1 (
     echo.
